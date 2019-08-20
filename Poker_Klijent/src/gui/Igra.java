@@ -1,20 +1,18 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Image;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import model.Igrac;
-
 import java.awt.Toolkit;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
-import java.awt.Canvas;
+import javax.swing.JButton;
+import java.awt.Font;
+import java.awt.Dimension;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class Igra extends JFrame {
 
@@ -23,22 +21,12 @@ public class Igra extends JFrame {
 	 */
 	private static final long serialVersionUID = -6751935266861541674L;
 	private JPanel contentPane;
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Igra frame = new Igra();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
 
 	/**
 	 * Create the frame.
@@ -53,20 +41,53 @@ public class Igra extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		Sto sto =new Sto();
-		Igrac i=new Igrac("laza","");
-		i.setNovac(5000);
-		Igrac i2=new Igrac("laza","");
-		sto.igraci.add(new Igrac("laza",""));
-		sto.igraci.add(new Igrac("laza",""));
-		sto.igraci.add(new Igrac("laza",""));
-		sto.igraci.add(new Igrac("laza",""));
-		i2.setNovac(5000);
-		sto.igraci.add(i);
-		sto.igraci.add(i2);
-		contentPane.add(sto);
+		if(GUIKontroler.sto==null)
+			GUIKontroler.sto=new Sto();
+		contentPane.add(GUIKontroler.sto);
+		
+		JPanel panel = new JPanel();
+		panel.setPreferredSize(new Dimension(10, 200));
+		contentPane.add(panel, BorderLayout.SOUTH);
+		panel.setLayout(null);
+		
+		JButton btnNewButton = new JButton("Check");
+		btnNewButton.setBounds(57, 13, 105, 31);
+		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		panel.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("Fold");
+		btnNewButton_1.setBounds(57, 57, 105, 29);
+		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		panel.add(btnNewButton_1);
+		
+		JButton btnRaise = new JButton("Raise");
+		btnRaise.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnRaise.setBounds(174, 13, 105, 31);
+		panel.add(btnRaise);
+		
+		JButton btnAllIn = new JButton("All in");
+		btnAllIn.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnAllIn.setBounds(174, 56, 105, 31);
+		panel.add(btnAllIn);
+		
+		textField = new JTextField();
+		textField.setBounds(291, 62, 200, 22);
+		panel.add(textField);
+		textField.setColumns(10);
+		
+		JSlider slider = new JSlider();
+		slider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				textField.setText(new Integer(slider.getValue()).toString());
+			}
+		});
+		slider.setValue(0);
+		slider.setPaintTicks(true);
+		slider.setPaintLabels(true);
+		slider.setMaximum((int)(GUIKontroler.igrac.getNovac()-GUIKontroler.igrac.getUlog()));
+		slider.setBounds(291, 13, 200, 31);
+		panel.add(slider);
+		
 		
 	}
-	
-
 }
