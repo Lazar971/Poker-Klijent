@@ -15,7 +15,11 @@ public class Sto extends JPanel {
 	
 	private int[] koordinateX=new int[]{120,120,500,500,880,810};
 	private int[] koordinateY=new int[]{300,640,260,700,300,700};
-	
+	private int[] karteX;
+	private int[] karteY;
+	private String[][] putanjeDoKarata=new String[][]{
+		{}
+	};
 	public  Sto() {
 		super();
 		this.setOpaque(false);

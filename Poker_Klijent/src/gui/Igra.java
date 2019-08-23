@@ -13,6 +13,9 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.SwingConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Igra extends JFrame {
 
@@ -51,31 +54,59 @@ public class Igra extends JFrame {
 		panel.setLayout(null);
 		
 		JButton btnNewButton = new JButton("Check");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				GUIKontroler.obradiCheck();
+			}
+		});
 		btnNewButton.setBounds(57, 13, 105, 31);
+		btnNewButton.setEnabled(GUIKontroler.mojPotez);
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		panel.add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("Fold");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GUIKontroler.obradiFold();
+			}
+		});
 		btnNewButton_1.setBounds(57, 57, 105, 29);
 		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnNewButton_1.setEnabled(GUIKontroler.mojPotez);
 		panel.add(btnNewButton_1);
 		
 		JButton btnRaise = new JButton("Raise");
+		btnRaise.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GUIKontroler.obradiRaise(Double.parseDouble(textField.getText()));
+			}
+		});
 		btnRaise.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnRaise.setEnabled(GUIKontroler.mojPotez);
 		btnRaise.setBounds(174, 13, 105, 31);
 		panel.add(btnRaise);
 		
 		JButton btnAllIn = new JButton("All in");
+		btnAllIn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GUIKontroler.obradiRaise(GUIKontroler.igrac.getNovac());
+			}
+		});
 		btnAllIn.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnAllIn.setEnabled(GUIKontroler.mojPotez);
 		btnAllIn.setBounds(174, 56, 105, 31);
 		panel.add(btnAllIn);
 		
 		textField = new JTextField();
+		textField.setHorizontalAlignment(SwingConstants.TRAILING);
 		textField.setBounds(291, 62, 200, 22);
+		textField.setEnabled(GUIKontroler.mojPotez);
 		panel.add(textField);
 		textField.setColumns(10);
 		
 		JSlider slider = new JSlider();
+		slider.setEnabled(GUIKontroler.mojPotez);
+		
 		slider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				textField.setText(new Integer(slider.getValue()).toString());

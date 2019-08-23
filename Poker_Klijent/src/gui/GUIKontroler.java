@@ -29,8 +29,12 @@ public class GUIKontroler extends Thread{
 	private static BufferedReader ulaz;
 	private static PrintStream izlaz;
 	public static Igrac igrac;
+	public static Karta[] karteNaStolu=new Karta[5];
+	private static int brojKarata=0;
 	public static List<Igrac> igraci=new LinkedList<Igrac>();
 	public static boolean stanjeMirovanja=true;
+	public static double minUlog=0;
+	public static boolean mojPotez=false;
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -70,7 +74,24 @@ public class GUIKontroler extends Thread{
 					igra.repaint();
 					continue;
 				}
-				
+				if(linija.equals("KARTE")){
+					primiKarte();
+					igra.repaint();
+					continue;
+				}
+				if(linija.equals("ULOG")){
+					primiUlog();
+					mojPotez=true;
+					igra.repaint();
+					wait(20000);
+					if(mojPotez){
+						mojPotez=false;
+						izlaz.println("FOLD");
+					}
+					
+					igra.repaint();
+					continue;
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -218,5 +239,49 @@ public class GUIKontroler extends Thread{
 			
 		}
 		return lista;
+	}
+	private static void primiKarte(){
+		
+		
+		try {
+			int a=Integer.parseInt(ulaz.readLine());
+			for(int i=0;i<a;i++){
+				String[] podaci=ulaz.readLine().split(" ");
+				Karta k=new Karta(Integer.parseInt(podaci[0]), Integer.parseInt(podaci[1]));
+				karteNaStolu[brojKarata++]=k;
+			}
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	private static void primiUlog(){
+		
+		try {
+			minUlog=Double.parseDouble(ulaz.readLine());
+			
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static void obradiCheck(){
+		
+		izlaz.println("CHECK");
+	}
+	public static void obradiFold(){
+		izlaz.println("FOLD");
+	}
+	public static void obradiRaise(double d){
+		izlaz.println("RAISE "+d);
 	}
 }
