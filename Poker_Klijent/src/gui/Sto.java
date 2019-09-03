@@ -75,8 +75,8 @@ public class Sto extends JPanel {
 				g.drawString(znak(drugiZnak)+" ", karteX[i]+5, 500+40);
 			}
 		}
-		g.drawString(a, 400, 280);	
-		g.drawString(minZaUlog, 400, 320);
+		g.drawString(a, 400, 200);	
+		g.drawString(minZaUlog, 400, 250);
 		g.drawString(ulog, 400, 620);
 		
 		
