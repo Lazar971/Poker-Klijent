@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -30,11 +31,12 @@ public class GUIKontroler extends Thread{
 	private static PrintStream izlaz;
 	public static Igrac igrac;
 	public static Karta[] karteNaStolu=new Karta[5];
-	private static int brojKarata=0;
+	public static int brojKarata=0;
 	public static List<Igrac> igraci=new LinkedList<Igrac>();
 	public static boolean stanjeMirovanja=true;
 	public static double minUlog=0;
 	public static boolean mojPotez=false;
+	public static String trenutniIgrac="";
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -45,6 +47,7 @@ public class GUIKontroler extends Thread{
 					izlaz=new PrintStream(soket.getOutputStream());
 					ps = new PocetnaStrana();
 					ps.setVisible(true);
+					
 					GUIKontroler kontroler=new GUIKontroler();
 					kontroler.start();
 				} catch (Exception e) {
@@ -58,8 +61,10 @@ public class GUIKontroler extends Thread{
 	public void run() {
 		while(true){
 			try {
+				if(igra==null)
+					igra=new Igra();
 				String linija=ulaz.readLine();
-				System.out.println("Primio poruku: "+linija);
+				
 				if(linija.equals("LOGIN")){
 					obradiLogin(login.getIme().getText());
 					continue;
@@ -71,6 +76,7 @@ public class GUIKontroler extends Thread{
 				}
 				if(linija.equals("UPDATE")){
 					igraci=inicijalizujIgrace();
+					
 					igra.repaint();
 					continue;
 				}
@@ -80,24 +86,31 @@ public class GUIKontroler extends Thread{
 					continue;
 				}
 				if(linija.equals("ULOG")){
-					primiUlog();
-					mojPotez=true;
-					igra.repaint();
-					wait(20000);
-					if(mojPotez){
-						mojPotez=false;
-						izlaz.println("FOLD");
-					}
 					
+					primiUlog();
+					
+					igra.repaint();
+					continue;
+				}
+				if(linija.equals("TRENUTNI")){
+					obradiTrenutni();
 					igra.repaint();
 					continue;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
 		}
 	}
 	
+	private static void obradiTrenutni() throws IOException {
+		String[] podaci=ulaz.readLine().split(" ");
+		trenutniIgrac=podaci[0];
+		minUlog=Double.parseDouble(podaci[1]);
+		
+	}
+
 	public static void otvoriLogin(){
 		if(login==null){
 			login=new Login();
@@ -170,7 +183,6 @@ public class GUIKontroler extends Thread{
 						try{
 							
 							izlaz.println("REGISTER");
-							System.out.println("Poslato za register");
 							izlaz.println(ime+" "+prezime+" "+userName+" "+sifra);
 							
 						}catch(Exception ex){
@@ -185,7 +197,6 @@ public class GUIKontroler extends Thread{
 		
 				try{
 					int a=Integer.parseInt(ulaz.readLine());
-					System.out.println("Rezultat registrovanja: "+a);
 					if(a==1){
 						JOptionPane.showMessageDialog(register,"Korisnik vec postoji");
 						return;
@@ -221,9 +232,11 @@ public class GUIKontroler extends Thread{
 			red=ulaz.readLine();
 			String[] podaci=red.split(" ");
 			Igrac i = new Igrac(podaci[0]);
-			System.out.println("Igrac iz liste: "+podaci[0]);
 			i.setNovac(Double.parseDouble(podaci[1]));
 			i.setUlog(Double.parseDouble(podaci[2]));
+			if(igrac.getIme().equals(i.getIme())){
+				igrac=i;
+			}
 			lista.add(i);
 			String k=ulaz.readLine();
 			if(k.equals("1"))
@@ -245,6 +258,10 @@ public class GUIKontroler extends Thread{
 		
 		try {
 			int a=Integer.parseInt(ulaz.readLine());
+			if(a==-1){
+				brojKarata=0;
+				return;
+			}
 			for(int i=0;i<a;i++){
 				String[] podaci=ulaz.readLine().split(" ");
 				Karta k=new Karta(Integer.parseInt(podaci[0]), Integer.parseInt(podaci[1]));
@@ -261,9 +278,11 @@ public class GUIKontroler extends Thread{
 	}
 
 	private static void primiUlog(){
-		
+		mojPotez=true;
+		Toolkit.getDefaultToolkit().beep();
 		try {
 			minUlog=Double.parseDouble(ulaz.readLine());
+			
 			
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
@@ -272,16 +291,19 @@ public class GUIKontroler extends Thread{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 
 	public static void obradiCheck(){
-		
 		izlaz.println("CHECK");
+		mojPotez=false;
 	}
 	public static void obradiFold(){
 		izlaz.println("FOLD");
+		mojPotez=false;
 	}
 	public static void obradiRaise(double d){
 		izlaz.println("RAISE "+d);
+		mojPotez=false;
 	}
 }
