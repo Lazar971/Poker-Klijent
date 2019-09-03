@@ -36,8 +36,8 @@ public class Sto extends JPanel {
 			a="Vi ste na potezu";
 		}else
 			a="Na potezu je igrac: "+GUIKontroler.trenutniIgrac;
-		String ulog="Trenutni ulog je: "+GUIKontroler.minUlog;
-		
+		String ulog="Trenutni ulog je: "+GUIKontroler.ukupanUlog;
+		String minZaUlog="Minimum za ulog je: "+GUIKontroler.minUlog;
 		g.drawImage(Toolkit.getDefaultToolkit().getImage(Igra.class.getResource("/resources/prazan sto.jpeg")), 100,100,  null);
 		for(int i=0;i<GUIKontroler.igraci.size();i++){
 			Igrac igrac=GUIKontroler.igraci.get(i);
@@ -75,7 +75,8 @@ public class Sto extends JPanel {
 				g.drawString(znak(drugiZnak)+" ", karteX[i]+5, 500+40);
 			}
 		}
-		g.drawString(a, 400, 290);	
+		g.drawString(a, 400, 280);	
+		g.drawString(minZaUlog, 400, 320);
 		g.drawString(ulog, 400, 620);
 		
 		

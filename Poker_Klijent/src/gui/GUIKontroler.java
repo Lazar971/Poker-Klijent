@@ -35,6 +35,7 @@ public class GUIKontroler extends Thread{
 	public static List<Igrac> igraci=new LinkedList<Igrac>();
 	public static boolean stanjeMirovanja=true;
 	public static double minUlog=0;
+	public static double ukupanUlog=0;
 	public static boolean mojPotez=false;
 	public static String trenutniIgrac="";
 	public static void main(String[] args) {
@@ -108,7 +109,7 @@ public class GUIKontroler extends Thread{
 		String[] podaci=ulaz.readLine().split(" ");
 		trenutniIgrac=podaci[0];
 		minUlog=Double.parseDouble(podaci[1]);
-		
+		ukupanUlog=Double.parseDouble(podaci[2]);
 	}
 
 	public static void otvoriLogin(){
